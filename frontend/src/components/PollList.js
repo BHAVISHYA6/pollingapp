@@ -3,7 +3,7 @@ import axios from 'axios';
 import Poll from './Poll';
 import API_BASE_URL from '../config';
 
-const PollList = () => {
+const PollList = ({ isAdmin, currentUser }) => {  // ← Add props here
   const [polls, setPolls] = useState([]);
 
   useEffect(() => {
@@ -24,7 +24,14 @@ const PollList = () => {
       {polls.length === 0 ? (
         <p>No polls yet. Login as admin to create one!</p>
       ) : (
-        polls.map(poll => <Poll key={poll._id} poll={poll} />)
+        polls.map(poll => (
+          <Poll 
+            key={poll._id} 
+            poll={poll} 
+            isAdmin={isAdmin}           // ← Pass to Poll component
+            currentUser={currentUser}    // ← Pass to Poll component
+          />
+        ))
       )}
     </div>
   );

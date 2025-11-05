@@ -2,23 +2,40 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import API_BASE_URL from '../config';
 
-const Poll = ({ poll }) => {
+const Poll = ({ poll, isAdmin, currentUser }) => {
   const [selectedOption, setSelectedOption] = useState(null);
-  const token = localStorage.getItem('token');
 
   const handleVote = async () => {
+    const token = localStorage.getItem('token');
     if (!token) return alert('Login to vote');
     try {
-      await axios.post(`${API_BASE_URL}/api/polls/${poll._id}/vote`, { optionIndex: selectedOption }, {
-        headers: { 'x-auth-token': token }
-      });
+      await axios.post(`${API_BASE_URL}/api/polls/${poll._id}/vote`, 
+        { optionIndex: selectedOption }, 
+        {
+          headers: { 'x-auth-token': token }
+        }
+      );
       window.location.reload();
     } catch (err) {
       alert(err.response?.data?.msg || 'Vote failed');
     }
   };
 
+  const handleDelete = async (pollId) => {  // ← Move this INSIDE the component
+    if (!window.confirm('Delete this poll?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_BASE_URL}/api/polls/${pollId}`, {
+        headers: { 'x-auth-token': token }
+      });
+      window.location.reload();
+    } catch (err) {
+      alert('Failed to delete poll');
+    }
+  };
+
   const totalVotes = poll.options.reduce((acc, opt) => acc + opt.votes, 0);
+  const token = localStorage.getItem('token');
 
   return (
     <div className="poll">
@@ -41,6 +58,16 @@ const Poll = ({ poll }) => {
         </button>
       ) : (
         <p><a href="/login">Login to vote</a></p>
+      )}
+      
+      {/* Only show delete for admins */}
+      {isAdmin && (
+        <button 
+          onClick={() => handleDelete(poll._id)}
+          style={{marginLeft: '10px', backgroundColor: 'red', color: 'white'}}
+        >
+          Delete
+        </button>
       )}
     </div>
   );
