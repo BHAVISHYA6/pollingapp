@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { withAuthenticator } from '@aws-amplify/ui-react';
+import { Auth } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import './styles.css';
 import PollList from './components/PollList';
@@ -10,25 +11,73 @@ import awsExports from './aws-exports';
 
 Amplify.configure(awsExports);
 
-function App({ user, signOut }) {
-  const isAdmin = user?.signInUserSession?.idToken?.payload?.['cognito:groups']?.includes('Admins');
+function App({ signOut }) {
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  const checkUser = async () => {
+    try {
+      // Get current authenticated user
+      const currentUser = await Auth.currentAuthenticatedUser();
+      setUser(currentUser);
+
+      // Get the session to access groups
+      const session = await Auth.currentSession();
+      const groups = session.getIdToken().payload['cognito:groups'] || [];
+      
+      // Debug logs
+      console.log('=== AUTH DEBUG ===');
+      console.log('Username:', currentUser.username);
+      console.log('Groups:', groups);
+      console.log('Is Admin:', groups.includes('Admins'));
+      console.log('================');
+
+      setIsAdmin(groups.includes('Admins'));
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="app">
+        <div style={{ textAlign: 'center', padding: '50px' }}>
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Router>
       <div className="app">
         <header>
-          <h1>PollMaster {isAdmin && <span className="admin-badge">ADMIN</span>}</h1>
+          <h1>
+            PollMaster {isAdmin && <span className="admin-badge">ADMIN</span>}
+          </h1>
           <nav>
             <Link to="/">Home</Link>
             {isAdmin && <Link to="/create">Create Poll</Link>}
-            <button onClick={signOut}>Logout</button>
+            <button onClick={signOut}>
+              Logout {user?.username && `(${user.username})`}
+            </button>
           </nav>
         </header>
         <main>
           <Routes>
             <Route path="/" element={<PollList />} />
-            <Route path="/create" element={isAdmin ? <CreatePoll /> : <Navigate to="/" />} />
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route 
+              path="/create" 
+              element={isAdmin ? <CreatePoll /> : <Navigate to="/" replace />} 
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
       </div>
