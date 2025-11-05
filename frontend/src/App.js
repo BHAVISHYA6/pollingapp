@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { withAuthenticator } from '@aws-amplify/ui-react';
-import { Auth } from 'aws-amplify';
+import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
 import '@aws-amplify/ui-react/styles.css';
 import './styles.css';
 import PollList from './components/PollList';
@@ -23,12 +23,12 @@ function App({ signOut }) {
   const checkUser = async () => {
     try {
       // Get current authenticated user
-      const currentUser = await Auth.currentAuthenticatedUser();
+      const currentUser = await getCurrentUser();
       setUser(currentUser);
 
       // Get the session to access groups
-      const session = await Auth.currentSession();
-      const groups = session.getIdToken().payload['cognito:groups'] || [];
+      const session = await fetchAuthSession();
+      const groups = session.tokens?.idToken?.payload['cognito:groups'] || [];
       
       // Debug logs
       console.log('=== AUTH DEBUG ===');
