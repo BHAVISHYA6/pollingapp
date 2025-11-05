@@ -10,6 +10,18 @@
       "StackName": "amplify-pollingapp-dev-fb6e6",
       "StackId": "arn:aws:cloudformation:ap-south-1:235150886668:stack/amplify-pollingapp-dev-fb6e6/7e2cafe0-ba3b-11f0-9e31-0a993274000f",
       "AmplifyAppId": "dxbdkx306r9tq"
+    },
+    "categories": {
+      "auth": {
+        "pollingappf7f6c286": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "AdminQueries34c94cdc": {
+          "deploymentBucketName": "amplify-pollingapp-dev-fb6e6-deployment",
+          "s3Key": "amplify-builds/AdminQueries34c94cdc-4d6743644c33584b4442-build.zip"
+        }
+      }
     }
   }
 }

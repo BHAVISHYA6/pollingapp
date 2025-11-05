@@ -10,11 +10,11 @@ require('dotenv').config();
     
     await User.findOneAndUpdate(
       { username: 'admin' },
-      { username: 'admin', password: hash, isAdmin: true },
+      { username: 'admin', password: admin123, isAdmin: true },
       { upsert: true, new: true }
     );
     
-    console.log('Admin created: admin / admin123');
+    console.log('Admin created: pardhuva / admin123');
   } catch (err) {
     console.error('Error:', err.message);
   } finally {
