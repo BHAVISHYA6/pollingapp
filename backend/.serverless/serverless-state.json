@@ -109,7 +109,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-cf2b9833-a6f1",
-                "S3Key": "serverless/poll-backend/prod/1762369931992-2025-11-05T19:12:11.992Z/poll-backend.zip"
+                "S3Key": "serverless/poll-backend/prod/1762370957935-2025-11-05T19:29:17.935Z/poll-backend.zip"
               },
               "Handler": "handler.handler",
               "Runtime": "nodejs18.x",
@@ -358,7 +358,7 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1762369919418": {
+          "ApiGatewayDeployment1762370945835": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -543,7 +543,7 @@
     "artifact": "C:\\polling-app\\backend\\.serverless\\poll-backend.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/poll-backend/prod/1762369931992-2025-11-05T19:12:11.992Z",
+    "artifactDirectoryName": "serverless/poll-backend/prod/1762370957935-2025-11-05T19:29:17.935Z",
     "artifact": "poll-backend.zip"
   }
 }
