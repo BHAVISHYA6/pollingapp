@@ -109,7 +109,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-cf2b9833-a6f1",
-                "S3Key": "serverless/poll-backend/prod/1762360866350-2025-11-05T16:41:06.350Z/poll-backend.zip"
+                "S3Key": "serverless/poll-backend/prod/1762367101635-2025-11-05T18:25:01.635Z/poll-backend.zip"
               },
               "Handler": "handler.handler",
               "Runtime": "nodejs18.x",
@@ -133,14 +133,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersion5CcZnlzOF83VUQjzAr33FaxiyAshHB80XJEptyQnmNg": {
+          "ApiLambdaVersionUiUxb1AgQMzRTp0XHpcrszziWcetDJibmDko7awOP8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "dzjVMgUaWSm/rC+/t8igU1asen6GzkBsiiLCgt6iV/g="
+              "CodeSha256": "pA1mxJV+AT50qDXLKpbDuw+9kI9ISSPH9p7QiBngwXk="
             }
           },
           "ApiGatewayRestApi": {
@@ -358,7 +358,7 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1762360854206": {
+          "ApiGatewayDeployment1762367091202": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -421,7 +421,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersion5CcZnlzOF83VUQjzAr33FaxiyAshHB80XJEptyQnmNg"
+              "Ref": "ApiLambdaVersionUiUxb1AgQMzRTp0XHpcrszziWcetDJibmDko7awOP8"
             },
             "Export": {
               "Name": "sls-poll-backend-prod-ApiLambdaFunctionQualifiedArn"
@@ -520,7 +520,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersion5CcZnlzOF83VUQjzAr33FaxiyAshHB80XJEptyQnmNg"
+        "versionLogicalId": "ApiLambdaVersionUiUxb1AgQMzRTp0XHpcrszziWcetDJibmDko7awOP8"
       }
     },
     "configValidationMode": "warn",
@@ -543,7 +543,7 @@
     "artifact": "C:\\polling-app\\backend\\.serverless\\poll-backend.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/poll-backend/prod/1762360866350-2025-11-05T16:41:06.350Z",
+    "artifactDirectoryName": "serverless/poll-backend/prod/1762367101635-2025-11-05T18:25:01.635Z",
     "artifact": "poll-backend.zip"
   }
 }

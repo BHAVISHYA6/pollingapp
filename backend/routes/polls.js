@@ -1,25 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const Poll = require('../models/Poll');
+const cognitoAuth = require('../middleware/cognitoAuth');
+const adminCheck = require('../middleware/adminCheck');
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
-// Auth middleware
-const auth = (req, res, next) => {
-  const token = req.header('x-auth-token');
-  if (!token) return res.status(401).json({ msg: 'No token' });
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    res.status(401).json({ msg: 'Invalid token' });
-  }
-};
-
-// Get all polls
+// Get all polls (public - no auth needed)
 router.get('/', async (req, res) => {
   try {
     const polls = await Poll.find().populate('creator', 'username');
@@ -30,27 +15,24 @@ router.get('/', async (req, res) => {
 });
 
 // Create poll - ADMIN ONLY
-router.post('/', auth, async (req, res) => {
-  if (!req.user.isAdmin) {
-    return res.status(403).json({ msg: 'Only admin can create polls' });
-  }
-
+router.post('/', cognitoAuth, adminCheck, async (req, res) => {
   const { question, options } = req.body;
   try {
     const poll = new Poll({
       question,
-      options: options.map(opt => ({ text: opt })),
-      creator: req.user.id,
+      options: options.map(opt => ({ text: opt, votes: 0 })),
+      creator: req.user.id,  // This comes from Cognito token
     });
     await poll.save();
     res.json(poll);
   } catch (err) {
+    console.error('Error creating poll:', err);
     res.status(500).json({ msg: 'Server error' });
   }
 });
 
 // Vote - LOGGED-IN USER
-router.post('/:id/vote', auth, async (req, res) => {
+router.post('/:id/vote', cognitoAuth, async (req, res) => {
   const { optionIndex } = req.body;
   try {
     const poll = await Poll.findById(req.params.id);
@@ -65,6 +47,21 @@ router.post('/:id/vote', auth, async (req, res) => {
     await poll.save();
     res.json(poll);
   } catch (err) {
+    console.error('Error voting:', err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Delete poll - ADMIN ONLY
+router.delete('/:id', cognitoAuth, adminCheck, async (req, res) => {
+  try {
+    const poll = await Poll.findById(req.params.id);
+    if (!poll) return res.status(404).json({ msg: 'Poll not found' });
+
+    await poll.deleteOne();
+    res.json({ msg: 'Poll deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting poll:', err);
     res.status(500).json({ msg: 'Server error' });
   }
 });

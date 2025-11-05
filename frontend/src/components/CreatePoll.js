@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import API_BASE_URL from '../config';
 
 const CreatePoll = () => {
@@ -16,11 +17,27 @@ const CreatePoll = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_BASE_URL}/api/polls`, { question, options }, {
-        headers: { 'x-auth-token': localStorage.getItem('token') }
-      });
+      // Get Amplify/Cognito token
+      const session = await fetchAuthSession();
+      const token = session.tokens?.idToken?.toString();
+      
+      if (!token) {
+        alert('Not authenticated');
+        return;
+      }
+
+      await axios.post(`${API_BASE_URL}/api/polls`, 
+        { question, options }, 
+        {
+          headers: { 
+            'Authorization': `Bearer ${token}`,  // Use Bearer token
+            'x-auth-token': token  // Keep this too in case backend checks this
+          }
+        }
+      );
       window.location.href = '/';
     } catch (err) {
+      console.error('Error creating poll:', err);
       alert(err.response?.data?.msg || 'Failed to create poll');
     }
   };
