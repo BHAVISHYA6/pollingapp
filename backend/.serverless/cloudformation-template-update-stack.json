@@ -91,7 +91,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-cf2b9833-a6f1",
-          "S3Key": "serverless/poll-backend/prod/1762371875722-2025-11-05T19:44:35.722Z/poll-backend.zip"
+          "S3Key": "serverless/poll-backend/prod/1762372826866-2025-11-05T20:00:26.866Z/poll-backend.zip"
         },
         "Handler": "handler.handler",
         "Runtime": "nodejs18.x",
@@ -115,14 +115,14 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersiongSx7nJVA959mHpYlOx8pWn2yb1X5Utccn0uLyLSXmm8": {
+    "ApiLambdaVersion7SFVz2d3WDoEr3hg9DAlyVGXxsc67wvZXeSNmYiuR4s": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "wBgI0n9xA6jtKLbE5HbsrcnEdza/bufGZllEOVGMxIg="
+        "CodeSha256": "n5ukNILIaSaAuliBfDgPdWFhQ/Xk9lvEo+1E6mH2yYk="
       }
     },
     "ApiGatewayRestApi": {
@@ -340,7 +340,7 @@
         "ApiLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1762371864311": {
+    "ApiGatewayDeployment1762372815056": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -403,7 +403,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersiongSx7nJVA959mHpYlOx8pWn2yb1X5Utccn0uLyLSXmm8"
+        "Ref": "ApiLambdaVersion7SFVz2d3WDoEr3hg9DAlyVGXxsc67wvZXeSNmYiuR4s"
       },
       "Export": {
         "Name": "sls-poll-backend-prod-ApiLambdaFunctionQualifiedArn"

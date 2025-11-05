@@ -25,11 +25,11 @@ module.exports = function(req, res, next) {
   const authHeader = req.header('Authorization');
   const token = authHeader?.replace('Bearer ', '') || req.header('x-auth-token');
 
-  console.log('=== COGNITO AUTH DEBUG ===');
+  console.log('=== COGNITO AUTH ===');
   console.log('Token received:', token ? 'YES' : 'NO');
 
   if (!token) {
-    console.log('No token provided');
+    console.log('ERROR: No token provided');
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
 
@@ -40,11 +40,12 @@ module.exports = function(req, res, next) {
       audience: COGNITO_APP_CLIENT_ID
     }, (err, decoded) => {
       if (err) {
-        console.error('Token verification error:', err.message);
+        console.error('Token verification FAILED:', err.message);
         return res.status(401).json({ msg: 'Token is not valid', error: err.message });
       }
 
-      console.log('Token verified! User:', decoded['cognito:username']);
+      console.log('Token verified SUCCESS!');
+      console.log('Username:', decoded['cognito:username']);
       console.log('Groups:', decoded['cognito:groups']);
 
       req.user = {
@@ -54,6 +55,7 @@ module.exports = function(req, res, next) {
         groups: decoded['cognito:groups'] || []
       };
       
+      console.log('=== END AUTH ===');
       next();
     });
   } catch (err) {

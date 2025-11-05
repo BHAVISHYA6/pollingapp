@@ -24,22 +24,6 @@ const Poll = ({ poll, isAdmin, currentUser }) => {
     }
   };
 
-  const handleDelete = async (pollId) => {
-    if (!window.confirm('Delete this poll?')) return;
-    try {
-      const token = localStorage.getItem('cognito-token');
-      await axios.delete(`${API_BASE_URL}/api/polls/${pollId}`, {
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'x-auth-token': token 
-        }
-      });
-      window.location.reload();
-    } catch (err) {
-      alert('Failed to delete poll');
-    }
-  };
-
   const totalVotes = poll.options.reduce((acc, opt) => acc + opt.votes, 0);
   const token = localStorage.getItem('cognito-token');
 
@@ -64,15 +48,6 @@ const Poll = ({ poll, isAdmin, currentUser }) => {
         </button>
       ) : (
         <p><a href="/login">Login to vote</a></p>
-      )}
-      
-      {isAdmin && (
-        <button 
-          onClick={() => handleDelete(poll._id)}
-          style={{marginLeft: '10px', backgroundColor: 'red', color: 'white'}}
-        >
-          Delete
-        </button>
       )}
     </div>
   );
