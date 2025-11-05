@@ -6,13 +6,16 @@ const Poll = ({ poll, isAdmin, currentUser }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleVote = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('cognito-token');
     if (!token) return alert('Login to vote');
     try {
       await axios.post(`${API_BASE_URL}/api/polls/${poll._id}/vote`, 
         { optionIndex: selectedOption }, 
         {
-          headers: { 'x-auth-token': token }
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'x-auth-token': token 
+          }
         }
       );
       window.location.reload();
@@ -21,12 +24,15 @@ const Poll = ({ poll, isAdmin, currentUser }) => {
     }
   };
 
-  const handleDelete = async (pollId) => {  // ← Move this INSIDE the component
+  const handleDelete = async (pollId) => {
     if (!window.confirm('Delete this poll?')) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('cognito-token');
       await axios.delete(`${API_BASE_URL}/api/polls/${pollId}`, {
-        headers: { 'x-auth-token': token }
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'x-auth-token': token 
+        }
       });
       window.location.reload();
     } catch (err) {
@@ -35,7 +41,7 @@ const Poll = ({ poll, isAdmin, currentUser }) => {
   };
 
   const totalVotes = poll.options.reduce((acc, opt) => acc + opt.votes, 0);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('cognito-token');
 
   return (
     <div className="poll">
@@ -60,7 +66,6 @@ const Poll = ({ poll, isAdmin, currentUser }) => {
         <p><a href="/login">Login to vote</a></p>
       )}
       
-      {/* Only show delete for admins */}
       {isAdmin && (
         <button 
           onClick={() => handleDelete(poll._id)}

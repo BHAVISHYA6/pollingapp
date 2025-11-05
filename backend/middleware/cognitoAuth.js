@@ -1,20 +1,18 @@
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 
-// Replace these with your actual values from AWS Cognito
-const COGNITO_REGION = 'ap-south-1';  // Your region
-const COGNITO_USER_POOL_ID = 'ap-south-1_yg1BWvige';  // Real pool ID
-const COGNITO_APP_CLIENT_ID = '722ku1p6eaufa38794deael805';  // Real client ID
+const COGNITO_REGION = 'ap-south-1';
+const COGNITO_USER_POOL_ID = 'ap-south-1_yg1BWvige';
+const COGNITO_APP_CLIENT_ID = '722ku1p6eaufa38794deael805';
 
-// JWKS client to get public keys from Cognito
 const client = jwksClient({
   jwksUri: `https://cognito-idp.${COGNITO_REGION}.amazonaws.com/${COGNITO_USER_POOL_ID}/.well-known/jwks.json`
 });
 
-// Function to get signing key
 function getKey(header, callback) {
   client.getSigningKey(header.kid, function(err, key) {
     if (err) {
+      console.error('Error getting signing key:', err);
       callback(err);
     } else {
       const signingKey = key.getPublicKey();
@@ -23,30 +21,32 @@ function getKey(header, callback) {
   });
 }
 
-// Middleware to verify Cognito token
 module.exports = function(req, res, next) {
-  // Get token from header
   const authHeader = req.header('Authorization');
   const token = authHeader?.replace('Bearer ', '') || req.header('x-auth-token');
 
-  // Check if no token
+  console.log('=== COGNITO AUTH DEBUG ===');
+  console.log('Token received:', token ? 'YES' : 'NO');
+
   if (!token) {
+    console.log('No token provided');
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
 
   try {
-    // Verify token
     jwt.verify(token, getKey, {
       algorithms: ['RS256'],
       issuer: `https://cognito-idp.${COGNITO_REGION}.amazonaws.com/${COGNITO_USER_POOL_ID}`,
       audience: COGNITO_APP_CLIENT_ID
     }, (err, decoded) => {
       if (err) {
-        console.error('Token verification error:', err);
-        return res.status(401).json({ msg: 'Token is not valid' });
+        console.error('Token verification error:', err.message);
+        return res.status(401).json({ msg: 'Token is not valid', error: err.message });
       }
 
-      // Add user info to request
+      console.log('Token verified! User:', decoded['cognito:username']);
+      console.log('Groups:', decoded['cognito:groups']);
+
       req.user = {
         id: decoded.sub,
         username: decoded['cognito:username'],

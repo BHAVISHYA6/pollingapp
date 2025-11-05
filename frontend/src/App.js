@@ -22,15 +22,18 @@ function App({ signOut }) {
 
   const checkUser = async () => {
     try {
-      // Get current authenticated user
       const currentUser = await getCurrentUser();
       setUser(currentUser);
 
-      // Get the session to access groups
       const session = await fetchAuthSession();
       const groups = session.tokens?.idToken?.payload['cognito:groups'] || [];
       
-      // Debug logs
+      // Store token for API calls
+      const token = session.tokens?.idToken?.toString();
+      if (token) {
+        localStorage.setItem('cognito-token', token);
+      }
+      
       console.log('=== AUTH DEBUG ===');
       console.log('Username:', currentUser.username);
       console.log('Groups:', groups);
@@ -72,7 +75,7 @@ function App({ signOut }) {
         </header>
         <main>
           <Routes>
-            <Route path="/" element={<PollList />} />
+            <Route path="/" element={<PollList isAdmin={isAdmin} currentUser={user} />} />
             <Route 
               path="/create" 
               element={isAdmin ? <CreatePoll /> : <Navigate to="/" replace />} 

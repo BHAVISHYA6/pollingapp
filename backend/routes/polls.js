@@ -4,7 +4,7 @@ const Poll = require('../models/Poll');
 const cognitoAuth = require('../middleware/cognitoAuth');
 const adminCheck = require('../middleware/adminCheck');
 
-// Get all polls (public - no auth needed)
+// Get all polls (public)
 router.get('/', async (req, res) => {
   try {
     const polls = await Poll.find().populate('creator', 'username');
@@ -14,14 +14,14 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create poll - ADMIN ONLY
+// Create poll (admin only)
 router.post('/', cognitoAuth, adminCheck, async (req, res) => {
   const { question, options } = req.body;
   try {
     const poll = new Poll({
       question,
       options: options.map(opt => ({ text: opt, votes: 0 })),
-      creator: req.user.id,  // This comes from Cognito token
+      creator: req.user.id,
     });
     await poll.save();
     res.json(poll);
@@ -31,7 +31,7 @@ router.post('/', cognitoAuth, adminCheck, async (req, res) => {
   }
 });
 
-// Vote - LOGGED-IN USER
+// Vote (logged-in user)
 router.post('/:id/vote', cognitoAuth, async (req, res) => {
   const { optionIndex } = req.body;
   try {
@@ -47,12 +47,11 @@ router.post('/:id/vote', cognitoAuth, async (req, res) => {
     await poll.save();
     res.json(poll);
   } catch (err) {
-    console.error('Error voting:', err);
     res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// Delete poll - ADMIN ONLY
+// Delete poll (admin only)
 router.delete('/:id', cognitoAuth, adminCheck, async (req, res) => {
   try {
     const poll = await Poll.findById(req.params.id);
