@@ -10,6 +10,7 @@ const PollList = ({ isAdmin, currentUser }) => {
     const fetchPolls = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/api/polls`);
+        console.log(res.data)
         setPolls(res.data);
       } catch (err) {
         console.error(err);
@@ -21,10 +22,10 @@ const PollList = ({ isAdmin, currentUser }) => {
   return (
     <div className="poll-list">
       <h2>Available Polls</h2>
-      {polls.length === 0 ? (
+      {polls && polls?.length === 0 ? (
         <p>No polls yet. Login as admin to create one!</p>
       ) : (
-        polls.map(poll => (
+       polls && polls?.map(poll => (
           <Poll 
             key={poll._id} 
             poll={poll}

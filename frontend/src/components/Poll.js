@@ -14,7 +14,6 @@ const Poll = ({ poll, isAdmin, currentUser }) => {
         {
           headers: { 
             'Authorization': `Bearer ${token}`,
-            'x-auth-token': token 
           }
         }
       );

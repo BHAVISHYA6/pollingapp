@@ -16,13 +16,31 @@ functions:
     handler: handler.handler
     events:
       - http:
-          path: /{proxy+}
-          method: ANY
-          cors: true
-      - http:
           path: /
           method: ANY
-          cors: true
+          cors:
+            origin: 'http://localhost:3000' # change to your frontend domain later
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors:
+            origin: 'http://localhost:3000'
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
 
 plugins:
   - serverless-offline

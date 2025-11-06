@@ -8,8 +8,13 @@ const optionSchema = new mongoose.Schema({
 const pollSchema = new mongoose.Schema({
   question: { type: String, required: true },
   options: [optionSchema],
-  creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  voters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+
+  // Store Cognito UUID instead of Mongo ObjectId
+  creator: { type: String, required: true },  
+
+  // Also store voter IDs (UUIDs) as strings
+  voters: [{ type: String }],
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Poll', pollSchema);

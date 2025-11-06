@@ -11,7 +11,7 @@
       "stage": "prod",
       "environment": {
         "MONGODB_URI": "mongodb+srv://bhavi5002:bhavi123@cluster0.ht8z4ij.mongodb.net/pollingdb?retryWrites=true&w=majority",
-        "JWT_SECRET": "superStrongSecret123!@#"
+        "JWT_SECRET": "superStrongSecret123!@"
       },
       "timeout": 30,
       "memorySize": 512,
@@ -109,7 +109,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-cf2b9833-a6f1",
-                "S3Key": "serverless/poll-backend/prod/1762372826866-2025-11-05T20:00:26.866Z/poll-backend.zip"
+                "S3Key": "serverless/poll-backend/prod/1762419184911-2025-11-06T08:53:04.911Z/poll-backend.zip"
               },
               "Handler": "handler.handler",
               "Runtime": "nodejs18.x",
@@ -119,7 +119,7 @@
               "Environment": {
                 "Variables": {
                   "MONGODB_URI": "mongodb+srv://bhavi5002:bhavi123@cluster0.ht8z4ij.mongodb.net/pollingdb?retryWrites=true&w=majority",
-                  "JWT_SECRET": "superStrongSecret123!@#"
+                  "JWT_SECRET": "superStrongSecret123!@"
                 }
               },
               "Role": {
@@ -133,14 +133,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersion7SFVz2d3WDoEr3hg9DAlyVGXxsc67wvZXeSNmYiuR4s": {
+          "ApiLambdaVersionslnDjucvfbwI1OvQgrDOskKoijQogbWAl4xsQD7UA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "n5ukNILIaSaAuliBfDgPdWFhQ/Xk9lvEo+1E6mH2yYk="
+              "CodeSha256": "LMgn4kag2BJUz213co20DBlk3JqBRALkeOS0YE4sh2o="
             }
           },
           "ApiGatewayRestApi": {
@@ -170,51 +170,6 @@
               }
             }
           },
-          "ApiGatewayMethodProxyVarOptions": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "AuthorizationType": "NONE",
-              "HttpMethod": "OPTIONS",
-              "MethodResponses": [
-                {
-                  "StatusCode": "200",
-                  "ResponseParameters": {
-                    "method.response.header.Access-Control-Allow-Origin": true,
-                    "method.response.header.Access-Control-Allow-Headers": true,
-                    "method.response.header.Access-Control-Allow-Methods": true
-                  },
-                  "ResponseModels": {}
-                }
-              ],
-              "RequestParameters": {},
-              "Integration": {
-                "Type": "MOCK",
-                "RequestTemplates": {
-                  "application/json": "{statusCode:200}"
-                },
-                "ContentHandling": "CONVERT_TO_TEXT",
-                "IntegrationResponses": [
-                  {
-                    "StatusCode": "200",
-                    "ResponseParameters": {
-                      "method.response.header.Access-Control-Allow-Origin": "'*'",
-                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
-                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
-                    },
-                    "ResponseTemplates": {
-                      "application/json": ""
-                    }
-                  }
-                ]
-              },
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceProxyVar"
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
           "ApiGatewayMethodOptions": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
@@ -226,7 +181,8 @@
                   "ResponseParameters": {
                     "method.response.header.Access-Control-Allow-Origin": true,
                     "method.response.header.Access-Control-Allow-Headers": true,
-                    "method.response.header.Access-Control-Allow-Methods": true
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
                   },
                   "ResponseModels": {}
                 }
@@ -242,9 +198,10 @@
                   {
                     "StatusCode": "200",
                     "ResponseParameters": {
-                      "method.response.header.Access-Control-Allow-Origin": "'*'",
-                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
-                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
+                      "method.response.header.Access-Control-Allow-Origin": "'http://localhost:3000'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'true'"
                     },
                     "ResponseTemplates": {
                       "application/json": ""
@@ -263,51 +220,52 @@
               }
             }
           },
-          "ApiGatewayMethodProxyVarAny": {
+          "ApiGatewayMethodProxyVarOptions": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
-              "HttpMethod": "ANY",
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
               "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'http://localhost:3000'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'true'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
               "ResourceId": {
                 "Ref": "ApiGatewayResourceProxyVar"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
-              },
-              "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
-              "Integration": {
-                "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
-                "Uri": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":lambda:path/2015-03-31/functions/",
-                      {
-                        "Fn::GetAtt": [
-                          "ApiLambdaFunction",
-                          "Arn"
-                        ]
-                      },
-                      "/invocations"
-                    ]
-                  ]
-                }
-              },
-              "MethodResponses": []
-            },
-            "DependsOn": [
-              "ApiLambdaPermissionApiGateway"
-            ]
+              }
+            }
           },
           "ApiGatewayMethodAny": {
             "Type": "AWS::ApiGateway::Method",
@@ -358,7 +316,53 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1762372815056": {
+          "ApiGatewayMethodProxyVarAny": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "ANY",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceProxyVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "ApiLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1762419165863": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -367,10 +371,10 @@
               "StageName": "prod"
             },
             "DependsOn": [
-              "ApiGatewayMethodProxyVarOptions",
               "ApiGatewayMethodOptions",
-              "ApiGatewayMethodProxyVarAny",
-              "ApiGatewayMethodAny"
+              "ApiGatewayMethodProxyVarOptions",
+              "ApiGatewayMethodAny",
+              "ApiGatewayMethodProxyVarAny"
             ]
           },
           "ApiLambdaPermissionApiGateway": {
@@ -421,7 +425,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersion7SFVz2d3WDoEr3hg9DAlyVGXxsc67wvZXeSNmYiuR4s"
+              "Ref": "ApiLambdaVersionslnDjucvfbwI1OvQgrDOskKoijQogbWAl4xsQD7UA"
             },
             "Export": {
               "Name": "sls-poll-backend-prod-ApiLambdaFunctionQualifiedArn"
@@ -467,48 +471,46 @@
         "events": [
           {
             "http": {
-              "path": "{proxy+}",
+              "path": "",
               "method": "any",
               "cors": {
-                "origin": "*",
+                "origin": "http://localhost:3000",
                 "methods": [
                   "OPTIONS",
                   "ANY"
                 ],
                 "headers": [
                   "Content-Type",
-                  "X-Amz-Date",
                   "Authorization",
+                  "X-Amz-Date",
                   "X-Api-Key",
                   "X-Amz-Security-Token",
-                  "X-Amz-User-Agent",
-                  "X-Amzn-Trace-Id"
+                  "X-Amz-User-Agent"
                 ],
-                "allowCredentials": false
+                "allowCredentials": true
               },
               "integration": "AWS_PROXY"
             }
           },
           {
             "http": {
-              "path": "",
+              "path": "{proxy+}",
               "method": "any",
               "cors": {
-                "origin": "*",
+                "origin": "http://localhost:3000",
                 "methods": [
                   "OPTIONS",
                   "ANY"
                 ],
                 "headers": [
                   "Content-Type",
-                  "X-Amz-Date",
                   "Authorization",
+                  "X-Amz-Date",
                   "X-Api-Key",
                   "X-Amz-Security-Token",
-                  "X-Amz-User-Agent",
-                  "X-Amzn-Trace-Id"
+                  "X-Amz-User-Agent"
                 ],
-                "allowCredentials": false
+                "allowCredentials": true
               },
               "integration": "AWS_PROXY"
             }
@@ -520,7 +522,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersion7SFVz2d3WDoEr3hg9DAlyVGXxsc67wvZXeSNmYiuR4s"
+        "versionLogicalId": "ApiLambdaVersionslnDjucvfbwI1OvQgrDOskKoijQogbWAl4xsQD7UA"
       }
     },
     "configValidationMode": "warn",
@@ -543,7 +545,7 @@
     "artifact": "C:\\polling-app\\backend\\.serverless\\poll-backend.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/poll-backend/prod/1762372826866-2025-11-05T20:00:26.866Z",
+    "artifactDirectoryName": "serverless/poll-backend/prod/1762419184911-2025-11-06T08:53:04.911Z",
     "artifact": "poll-backend.zip"
   }
 }

@@ -23,16 +23,19 @@ const CreatePoll = () => {
         alert('Not authenticated');
         return;
       }
-
+      
+      console.log('Creating poll with token:', token);
+      
       await axios.post(`${API_BASE_URL}/api/polls`, 
         { question, options }, 
         {
           headers: { 
             'Authorization': `Bearer ${token}`,
-            'x-auth-token': token
           }
+          // REMOVED: withCredentials: true
         }
       );
+      
       window.location.href = '/';
     } catch (err) {
       console.error('Error creating poll:', err);
